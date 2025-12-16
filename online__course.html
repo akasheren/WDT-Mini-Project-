@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Course Catalog</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:
+      linear-gradient(rgba(10,10,30,.85),rgba(10,10,30,.85)),
+      url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80');
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+    color:#fff;
+}
+
+header{
+    background:rgba(0,0,0,.55);
+    padding:20px;
+    text-align:center;
+}
+
+header h1{font-size:30px}
+
+nav{margin-top:10px}
+
+nav a{
+    color:#fff;
+    text-decoration:none;
+    margin:0 10px;
+    padding:8px 18px;
+    background:rgba(255,255,255,.15);
+    border-radius:20px;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:40px 20px;
+}
+
+.section-title{
+    font-size:24px;
+    margin-bottom:20px;
+    border-left:5px solid #4caf50;
+    padding-left:10px;
+}
+
+.course-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+.course-card{
+    background:rgba(255,255,255,.12);
+    border-radius:15px;
+    overflow:hidden;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.course-card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 20px 40px rgba(0,0,0,.4);
+}
+
+.course-card img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+}
+
+.course-content{padding:20px}
+
+.course-content h3{margin-bottom:8px}
+
+.course-content p{
+    font-size:14px;
+    opacity:.85;
+}
+
+.tag{
+    display:inline-block;
+    padding:5px 12px;
+    border-radius:20px;
+    font-size:12px;
+    margin-top:8px;
+    background:#ff9800;
+}
+
+.tag.new{background:#4caf50}
+.tag.top{background:#2196f3}
+.tag.popular{background:#e91e63}
+.tag.trending{background:#9c27b0}
+
+.details{
+    display:none;
+    max-width:900px;
+    margin:auto;
+    background:rgba(255,255,255,.12);
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.details img{
+    width:100%;
+    height:300px;
+    object-fit:cover;
+}
+
+.details-content{padding:30px}
+
+.details-content p{margin:8px 0}
+
+.btn{
+    margin-top:15px;
+    padding:10px 25px;
+    border:none;
+    background:#2196f3;
+    color:#fff;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+footer{
+    text-align:center;
+    padding:20px;
+    background:rgba(0,0,0,.5);
+    margin-top:40px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Online Course Catalog</h1>
+    <nav>
+        <a href="#" onclick="showHome()">Home</a>
+        <a href="#" onclick="showMyCourses()">My Courses</a>
+    </nav>
+</header>
+
+<div class="container">
+
+<!-- HOME -->
+<div id="home">
+    <div class="section-title">🔥 Top Courses</div>
+    <div class="course-grid" id="topCourses"></div>
+
+    <br><br>
+
+    <div class="section-title">🆕 New Courses</div>
+    <div class="course-grid" id="newCourses"></div>
+
+    <br><br>
+
+    <div class="section-title">📚 All Courses</div>
+    <div class="course-grid" id="allCourses"></div>
+</div>
+
+<!-- DETAILS -->
+<div class="details" id="details">
+    <img id="dImg">
+    <div class="details-content">
+        <h2 id="dTitle"></h2>
+        <p id="dDesc"></p>
+        <p><b>Duration:</b> <span id="dDuration"></span></p>
+        <p><b>Level:</b> <span id="dLevel"></span></p>
+        <p><b>Tutor:</b> <span id="dTutor"></span></p>
+        <p><b>Course Fee:</b> ₹<span id="dFeeINR"></span> / $<span id="dFeeUSD"></span></p>
+        <button class="btn" onclick="addToMyCourses()">Add to My Courses</button>
+        <button class="btn" onclick="showHome()">Back</button>
+    </div>
+</div>
+
+<!-- MY COURSES -->
+<div id="myCourses" style="display:none">
+    <div class="section-title">🎓 My Courses</div>
+    <div class="course-grid" id="myCourseGrid"></div>
+</div>
+
+</div>
+
+<footer>
+© 2025 Online Course Catalog | Student Project
+</footer>
+
+<script>
+const courses=[
+ {
+  title:"HTML & CSS Basics",
+  desc:"Learn website fundamentals.",
+  duration:"4 Weeks",
+  level:"Beginner",
+  tutor:"Mr. Arun Kumar",
+  feeINR:3999,
+  feeUSD:49,
+  img:"https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80",
+  tag:"top"
+ },
+ {
+  title:"JavaScript Fundamentals",
+  desc:"Interactive web development.",
+  duration:"5 Weeks",
+  level:"Beginner",
+  tutor:"Ms. Priya Sharma",
+  feeINR:4899,
+  feeUSD:59,
+  img:"https://images.unsplash.com/photo-1627398242454-45a1465c2479?auto=format&fit=crop&w=1200&q=80",
+  tag:"popular"
+ },
+ {
+  title:"Python Programming",
+  desc:"Learn Python basics.",
+  duration:"4 Weeks",
+  level:"Beginner",
+  tutor:"Dr. Rahul Mehta",
+  feeINR:4599,
+  feeUSD:55,
+  img:"https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1200&q=80",
+  tag:"new"
+ },
+ {
+  title:"React JS Essentials",
+  desc:"Modern frontend apps.",
+  duration:"6 Weeks",
+  level:"Intermediate",
+  tutor:"Ms. Neha Verma",
+  feeINR:6499,
+  feeUSD:79,
+  img:"https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=1200&q=80",
+  tag:"top"
+ },
+ {
+  title:"Database & SQL",
+  desc:"Database management.",
+  duration:"5 Weeks",
+  level:"Intermediate",
+  tutor:"Mr. Suresh Iyer",
+  feeINR:5699,
+  feeUSD:69,
+  img:"https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=1200&q=80",
+  tag:"trending"
+ },
+ {
+  title:"UI/UX Design",
+  desc:"Design user interfaces.",
+  duration:"3 Weeks",
+  level:"Beginner",
+  tutor:"Ms. Ananya Rao",
+  feeINR:3699,
+  feeUSD:45,
+  img:"https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=1200&q=80",
+  tag:"new"
+ }
+];
+
+let currentIndex=0;
+let myCourses=JSON.parse(localStorage.getItem("myCourses"))||[];
+
+const home=document.getElementById("home");
+const details=document.getElementById("details");
+const myCoursesDiv=document.getElementById("myCourses");
+
+function createCard(c,i){
+ return `
+ <div class="course-card" onclick="openCourse(${i})">
+  <img src="${c.img}">
+  <div class="course-content">
+   <h3>${c.title}</h3>
+   <p>${c.desc}</p>
+   <span class="tag ${c.tag}">${c.tag.toUpperCase()}</span>
+  </div>
+ </div>`;
+}
+
+function loadCourses(){
+ topCourses.innerHTML="";
+ newCourses.innerHTML="";
+ allCourses.innerHTML="";
+
+ courses.forEach((c,i)=>{
+   if(c.tag==="top") topCourses.innerHTML+=createCard(c,i);
+   if(c.tag==="new") newCourses.innerHTML+=createCard(c,i);
+   allCourses.innerHTML+=createCard(c,i);
+ });
+}
+
+function openCourse(i){
+ currentIndex=i;
+ home.style.display="none";
+ myCoursesDiv.style.display="none";
+ details.style.display="block";
+
+ dImg.src=courses[i].img;
+ dTitle.innerText=courses[i].title;
+ dDesc.innerText=courses[i].desc;
+ dDuration.innerText=courses[i].duration;
+ dLevel.innerText=courses[i].level;
+ dTutor.innerText=courses[i].tutor;
+ dFeeINR.innerText=courses[i].feeINR;
+ dFeeUSD.innerText=courses[i].feeUSD;
+}
+
+function addToMyCourses(){
+ if(!myCourses.some(c=>c.title===courses[currentIndex].title)){
+   myCourses.push({...courses[currentIndex],isNew:true});
+   localStorage.setItem("myCourses",JSON.stringify(myCourses));
+ }
+ showMyCourses();
+}
+
+function showHome(){
+ details.style.display="none";
+ myCoursesDiv.style.display="none";
+ home.style.display="block";
+}
+
+function showMyCourses(){
+ home.style.display="none";
+ details.style.display="none";
+ myCoursesDiv.style.display="block";
+ renderMyCourses();
+}
+
+function renderMyCourses(){
+ myCourseGrid.innerHTML="";
+ if(myCourses.length===0){
+   myCourseGrid.innerHTML="<p>No courses added yet.</p>";
+   return;
+ }
+ myCourses.forEach(c=>{
+   myCourseGrid.innerHTML+=`
+   <div class="course-card">
+    <img src="${c.img}">
+    <div class="course-content">
+     <h3>${c.title}</h3>
+     ${c.isNew?'<span class="tag new">NEW</span>':''}
+    </div>
+   </div>`;
+   c.isNew=false;
+ });
+ localStorage.setItem("myCourses",JSON.stringify(myCourses));
+}
+
+loadCourses();
+</script>
+
+</body>
+</html>
